@@ -17,16 +17,16 @@ Options:
 
 - [create-dir](#create-dir)
 - [decrypt](#decrypt-encrypt)
-- [delete-dir](#delete-dir-list-dir)
+- [delete-dir](#delete-dir)
 - [encrypt](#decrypt-encrypt)                         
-- [list-dir](#delete-dir-list-dir)
+- [list-dir](#list-dir)
 - list-dirs
 
 #### create-dir
 
 ```
 Options:
---alias         TEXT  [default: None] [required]
+--alias         TEXT  [default: os.getcwd().split(os.sep)[-1]]
 --src-dir       TEXT  [default: os.getcwd()]
 --enc-dir       TEXT  [default: None]
 --filter        TEXT  [default: None]
@@ -38,14 +38,23 @@ Options:
 
 ```
 Arguments:
-  alias [ALIAS]  [default: None]
+  alias [ALIAS]  TEXT  [default: os.getcwd().split(os.sep)[-1]]
+Options:
+--force-all            [default: no-force-all]
 ```
 
-#### delete-dir list-dir
+#### delete-dir
 
 ```
 Arguments:
-* alias [ALIAS]  TEXT  [default: None] [required]
+  alias [ALIAS]  TEXT  [default: None]
+```
+
+#### list-dir
+
+```
+Arguments:
+  alias [ALIAS]  TEXT  [default: os.getcwd().split(os.sep)[-1]]
 ```
 
 ## Requirements

@@ -25,18 +25,28 @@ from directory import (
 # Instance of Typer
 app = typer.Typer()
 
+# Current working directory
+working_dir = os.getcwd()
+
+# Current folder name of working directory
+dir_name = working_dir.split(os.sep)[-1]
+
 @app.command()
-def encrypt(alias: Annotated[str, typer.Argument()] = None):
+def encrypt(
+    alias: Annotated[str, typer.Argument()] = dir_name,
+    force_all: bool = False):
     # Encrypts directories
-    encrypt_dir(alias)
+    encrypt_dir(alias, force_all)
 
 @app.command()
-def decrypt(alias: Annotated[str, typer.Argument()] = None):
+def decrypt(
+    alias: Annotated[str, typer.Argument()] = dir_name,
+    force_all: bool = False):
     # Decrypts directories
-    decrypt_dir(alias)
+    decrypt_dir(alias, force_all)
 
 @app.command()
-def list_dir(alias: Annotated[str, typer.Argument()]):
+def list_dir(alias: Annotated[str, typer.Argument()] = dir_name):
     # Lists directory by alias
     dir = get_directory({ 'alias': alias })
     print(dir)
@@ -50,8 +60,8 @@ def list_dirs():
 
 @app.command()
 def create_dir(
-        alias: Annotated[str, typer.Option()],
-        src_dir: Annotated[str, typer.Option()] = os.getcwd(),
+        alias: Annotated[str, typer.Option()] = dir_name,
+        src_dir: Annotated[str, typer.Option()] = working_dir,
         enc_dir: str = None,
         filter: str = None,
         pwd: str = None,

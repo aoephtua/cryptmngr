@@ -26,18 +26,18 @@ def get_opts_with_args(dir, entries):
             opts += f'--{opt} "{value}"'
     return opts
 
-def get_directories_for_cmd(alias = None):
+def get_directories_for_cmd(alias = None, force_all = False):
     # Gets array with directories for command process
     if alias:
         dir = get_directory({ 'alias': alias })
         if dir:
             return [dir]
-    else:
+    elif force_all:
         return get_directories()
 
-def proc_cryptdir_cmd(cmd, alias = None):
+def proc_cryptdir_cmd(cmd, alias = None, force_all = False):
     # Processes cryptdir command
-    dirs = get_directories_for_cmd(alias)
+    dirs = get_directories_for_cmd(alias, force_all)
     entries = {
         'pwd': 'password',
         'src_dir': 'src-directory',
@@ -54,10 +54,10 @@ def proc_cryptdir_cmd(cmd, alias = None):
     else:
         print('No directories found')
 
-def encrypt(alias = None):
+def encrypt(alias = None, force_all = False):
     # Encrypts directories
-    proc_cryptdir_cmd('encrypt', alias)
+    proc_cryptdir_cmd('encrypt', alias, force_all)
 
-def decrypt(alias = None):
+def decrypt(alias = None, force_all = False):
     # Decrypts directories
-    proc_cryptdir_cmd('decrypt', alias)
+    proc_cryptdir_cmd('decrypt', alias, force_all)
