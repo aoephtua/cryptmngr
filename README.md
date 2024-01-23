@@ -14,13 +14,25 @@ Options:
 ```
 
 ### Commands
-
-- [create-dir](#create-dir)
-- [decrypt](#decrypt-encrypt)
-- [delete-dir](#delete-dir)
-- [encrypt](#decrypt-encrypt)                         
+                       
+- [list-dirs](#list-dirs)
 - [list-dir](#list-dir)
-- list-dirs
+- [create-dir](#create-dir)
+- [update-dir](#update-dir)
+- [delete-dir](#delete-dir)
+- [encrypt](#encrypt-decrypt)
+- [decrypt](#encrypt-decrypt)
+
+#### list-dirs
+
+No options and arguments available.
+
+#### list-dir
+
+```
+Arguments:
+  alias [ALIAS]  TEXT  [default: os.getcwd().split(os.sep)[-1]]
+```
 
 #### create-dir
 
@@ -34,27 +46,30 @@ Options:
 --force-enc-id        [default: no-force-enc-id]
 ```
 
-#### decrypt encrypt
+#### update-dir
 
 ```
 Arguments:
-  alias [ALIAS]  TEXT  [default: os.getcwd().split(os.sep)[-1]]
+* alias [ALIAS]  TEXT  [default: None] [required]
 Options:
---force-all            [default: no-force-all]
+* --key          TEXT  [default: None] [required]
+* --value        TEXT  [default: None] [required]
 ```
 
 #### delete-dir
 
 ```
 Arguments:
-  alias [ALIAS]  TEXT  [default: None]
+* alias [ALIAS]  TEXT  [default: None] [required]
 ```
 
-#### list-dir
+#### encrypt decrypt
 
 ```
 Arguments:
   alias [ALIAS]  TEXT  [default: os.getcwd().split(os.sep)[-1]]
+Options:
+--force-all            [default: no-force-all]
 ```
 
 ## Requirements

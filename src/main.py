@@ -19,6 +19,7 @@ from directory import (
     get_directory,
     get_directories,
     create_directory,
+    update_directory,
     delete_directory
 )
 
@@ -46,7 +47,8 @@ def decrypt(
     decrypt_dir(alias, force_all)
 
 @app.command()
-def list_dir(alias: Annotated[str, typer.Argument()] = dir_name):
+def list_dir(
+    alias: Annotated[str, typer.Argument()] = dir_name):
     # Lists directory by alias
     dir = get_directory({ 'alias': alias })
     print(dir)
@@ -60,26 +62,33 @@ def list_dirs():
 
 @app.command()
 def create_dir(
-        alias: Annotated[str, typer.Option()] = dir_name,
-        src_dir: Annotated[str, typer.Option()] = working_dir,
-        enc_dir: str = None,
-        filter: str = None,
-        pwd: str = None,
-        force_enc_id: bool = False):
+    alias: Annotated[str, typer.Option()] = dir_name,
+    src_dir: Annotated[str, typer.Option()] = working_dir,
+    enc_dir: str = None,
+    filter: str = None,
+    pwd: str = None,
+    force_enc_id: bool = False):
     # Creates directory by arguments
-    result = create_directory({
-        'alias': alias,
-        'src_dir': src_dir,
-        'enc_dir': enc_dir,
-        'filter': filter,
-        'pwd': pwd
-    }, force_enc_id)
+    args = [alias, src_dir, enc_dir, filter, pwd]
+    result = create_directory(args, force_enc_id)
     if result:
         inserted_id = result.inserted_id
         dir = get_directory({ '_id': inserted_id })
         print(dir)
     else:
         print(f'Error: Directory "{src_dir}" already exists')
+
+@app.command()
+def update_dir(
+    alias: Annotated[str, typer.Argument()],
+    key: Annotated[str, typer.Option()],
+    value: Annotated[str, typer.Option()]):
+    # Updates directory by arguments
+    res = update_directory(alias, key, value)
+    if res:
+        print(f'Updated count: {res.modified_count}')
+    else:
+        print('Error: Invalid arguments')
 
 @app.command()
 def delete_dir(alias: Annotated[str, typer.Argument()]):

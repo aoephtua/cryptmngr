@@ -19,3 +19,12 @@ def get_collection(db_name, name):
     # Get database collection by name
     db = get_database(db_name)
     return db[name]
+
+def get_document(entries, args):
+    # Gets document with arguments by keys and values
+    dir = {}
+    for x in range(0, len(entries)):
+        value = args[x]
+        if value is not None:
+            dir[entries[x]] = value
+    return dir

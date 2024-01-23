@@ -8,13 +8,22 @@ import os
 from datetime import datetime, timezone
 
 # Third party imports
-from mongodb import get_collection
+from mongodb import get_collection, get_document
 
 # Local imports
 from cryptutils import generate_uuid4_str, generate_pwd
 
 # MongoDB collection of dictionaries
 directories = get_collection('cryptmngr', 'directories')
+
+# Array with entries of directory
+entries = [
+    'alias',
+    'src_dir',
+    'enc_dir',
+    'filter',
+    'pwd'
+]
 
 def get_utc_now():
     # Gets current datetime with UTC timezone
@@ -29,8 +38,9 @@ def get_directories(filter = None, sort = 'alias'):
     # Gets sorted instances of directories by specified filter
     return directories.find(filter).sort(sort)
 
-def create_directory(directory, force_enc_id):
+def create_directory(args, force_enc_id):
     # Creates directory by arguments
+    directory = get_document(entries, args)
     filter = {
         'alias': directory.get('alias'),
         'src_dir': directory.get('src_dir')
@@ -43,10 +53,6 @@ def create_directory(directory, force_enc_id):
                 enc_id = generate_uuid4_str()
                 enc_dir = os.path.join(enc_dir, enc_id)
                 directory.update({ 'enc_dir': enc_dir })
-        else:
-            del directory['enc_dir']
-        if directory.get('filter') == None:
-            del directory['filter']
         if not directory.get('pwd'):
             directory.update({ 'pwd': generate_pwd(48) })
         dir = {
@@ -54,6 +60,17 @@ def create_directory(directory, force_enc_id):
             'created_at': get_utc_now()
         }
         return directories.insert_one(dir)
+
+def update_directory(alias, key, value):
+    # Updates directory by arguments
+    if key in entries and value is not None:
+        dir = {}
+        dir[key] = value
+        dir['updated_at'] = get_utc_now()
+        return directories.update_one(
+            { 'alias': alias },
+            { '$set': dir }
+        )
     
 def delete_directory(alias):
     # Deletes directory by specified alias
