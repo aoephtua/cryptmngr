@@ -28,12 +28,12 @@ def get_opts_with_args(dir, entries):
 
 def get_directories_for_cmd(alias = None, force_all = False):
     # Gets array with directories for command process
-    if alias:
+    if force_all:
+        return list(get_directories())
+    elif alias:
         dir = get_directory({ 'alias': alias })
         if dir:
             return [dir]
-    elif force_all:
-        return get_directories()
 
 def proc_cryptdir_cmd(cmd, alias = None, force_all = False):
     # Processes cryptdir command
@@ -52,7 +52,7 @@ def proc_cryptdir_cmd(cmd, alias = None, force_all = False):
             print(Fore.CYAN + command + Style.RESET_ALL)
             os.system(command)
     else:
-        print('No directories found')
+        print(f'No director{'ies' if force_all else f'y with alias "{alias}"'} found')
 
 def encrypt(alias = None, force_all = False):
     # Encrypts directories
