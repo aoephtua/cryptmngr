@@ -39,7 +39,7 @@ Options:
 
 ### Command Details
 
-##### list-codes
+#### list-codes
 
 No options and arguments available.
 
