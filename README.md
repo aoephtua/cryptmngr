@@ -13,15 +13,72 @@ Options:
 --help  Show this message and exit.
 ```
 
-### Commands
-                       
-- [list-dirs](#list-dirs)
-- [list-dir](#list-dir)
-- [create-dir](#create-dir)
-- [update-dir](#update-dir)
-- [delete-dir](#delete-dir)
-- [encrypt](#encrypt-decrypt)
-- [decrypt](#encrypt-decrypt)
+### Command Summary
+
+#### Codes
+
+* [list-codes](#list-codes)
+* [list-code](#list-code)
+* [create-code](#create-code)
+* [update-code](#update-code)
+* [delete-code](#delete-code)
+
+#### Directories
+
+* [list-dirs](#list-dirs)
+* [list-dir](#list-dir)
+* [create-dir](#create-dir)
+* [update-dir](#update-dir)
+* [delete-dir](#delete-dir)
+
+
+#### Processing
+
+* [encrypt](#encrypt-decrypt)
+* [decrypt](#encrypt-decrypt)
+
+### Command Details
+
+##### list-codes
+
+No options and arguments available.
+
+#### list-code
+
+```
+Arguments:
+* name [NAME]  TEXT  [default: None] [required]
+```
+
+#### create-code
+
+```
+Arguments:
+* file_path [FILE_PATH]  TEXT  [default: None] [required]
+Options:
+--name                   TEXT  [default: os.path.basename(file_path)]
+--cmd                    TEXT  [default: encrypt]
+--exec                   TEXT  [default: post]
+--all                          [default: all]
+--disabled                     [default: no-disabled]
+```
+
+#### update-code
+
+```
+Arguments:
+* name [NAME]  TEXT  [default: None] [required]
+Options:
+* --key        TEXT  [default: None] [required]
+* --value      TEXT  [default: None] [required]
+```
+
+#### delete-code
+
+```
+Arguments:
+* name [NAME]  TEXT  [default: None] [required]
+```
 
 #### list-dirs
 
