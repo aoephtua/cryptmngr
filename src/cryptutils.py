@@ -3,7 +3,7 @@
 
 # src/cryptutils.py
 
-# Local imports
+# Standard library imports
 import secrets
 import string
 import uuid

@@ -11,17 +11,20 @@ import typer
 from typing_extensions import Annotated
 
 # Local imports
+from cli import (
+    list_docs,
+    list_doc,
+    create_doc,
+    update_doc,
+    delete_doc
+)
 from cryptmngr import (
     encrypt as encrypt_dir,
     decrypt as decrypt_dir
 )
-from directory import (
-    get_directory,
-    get_directories,
-    create_directory,
-    update_directory,
-    delete_directory
-)
+from enums import Cmd, Exec
+from models.code import Code
+from models.directory import Directory
 
 # Instance of Typer
 app = typer.Typer()
@@ -47,18 +50,57 @@ def decrypt(
     decrypt_dir(alias, force_all)
 
 @app.command()
+def list_code(
+    name: Annotated[str, typer.Argument()]):
+    # Lists code by name
+    list_doc(Code, name)
+
+@app.command()
+def list_codes():
+    # Lists all codes
+    list_docs(Code)
+
+@app.command()
+def create_code(
+    file_path: Annotated[str, typer.Argument()],
+    name: Annotated[str, typer.Option()] = '',
+    cmd: Annotated[Cmd, typer.Option()] = Cmd.encrypt,
+    exec: Annotated[Exec, typer.Option()] = Exec.post,
+    all: Annotated[bool, typer.Option()] = True,
+    disabled: bool = False):
+    # Creates code by arguments
+    file_path = os.path.abspath(file_path)
+    if os.path.exists(file_path):
+        if not name:
+            name = os.path.basename(file_path)
+        enabled = not disabled
+        create_doc(Code, name, locals())
+    else:
+        print(f'File "{file_path}" not found')
+
+@app.command()
+def update_code(
+    name: Annotated[str, typer.Argument()],
+    key: Annotated[str, typer.Option()],
+    value: Annotated[str, typer.Option()]):
+    # Updates code by arguments
+    update_doc(Code, name, key, value)
+
+@app.command()
+def delete_code(name: Annotated[str, typer.Argument()]):
+    # Deletes code by name
+    delete_doc(Code, name)
+
+@app.command()
 def list_dir(
     alias: Annotated[str, typer.Argument()] = dir_name):
     # Lists directory by alias
-    dir = get_directory({ 'alias': alias })
-    print(dir)
+    list_doc(Directory, alias)
 
 @app.command()
 def list_dirs():
     # Lists all directories
-    dirs = get_directories()
-    for dir in dirs:
-        print(dir)
+    list_docs(Directory)
 
 @app.command()
 def create_dir(
@@ -69,14 +111,7 @@ def create_dir(
     pwd: str = None,
     force_enc_id: bool = False):
     # Creates directory by arguments
-    args = [alias, src_dir, enc_dir, filter, pwd]
-    result = create_directory(args, force_enc_id)
-    if result:
-        inserted_id = result.inserted_id
-        dir = get_directory({ '_id': inserted_id })
-        print(dir)
-    else:
-        print(f'Error: Directory "{src_dir}" already exists')
+    create_doc(Directory, src_dir, locals())
 
 @app.command()
 def update_dir(
@@ -84,17 +119,12 @@ def update_dir(
     key: Annotated[str, typer.Option()],
     value: Annotated[str, typer.Option()]):
     # Updates directory by arguments
-    res = update_directory(alias, key, value)
-    if res:
-        print(f'Updated count: {res.modified_count}')
-    else:
-        print('Error: Invalid arguments')
+    update_doc(Directory, alias, key, value)
 
 @app.command()
 def delete_dir(alias: Annotated[str, typer.Argument()]):
     # Deletes directory by alias
-    res = delete_directory(alias)
-    print(f'Deleted count: {res.deleted_count}')
+    delete_doc(Directory, alias)
 
 # Only runs when file is executed as a script
 if __name__ == '__main__':
