@@ -11,9 +11,8 @@ def print_dict(dict):
 def list_docs(model):
     # Lists documents
     docs = model.get_documents()
-    multiple = len(docs) > 1
     for idx, doc in enumerate(docs):
-        if multiple and idx > 0:
+        if idx > 0:
             print()
         print_dict(doc)
 
